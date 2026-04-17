@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="p-5 mb-4 bg-white rounded-3 shadow-sm border border-primary border-opacity-25">
+    <div class="container-fluid py-2 text-center">
+        <h1 class="display-5 fw-bold text-primary">Chào mừng đến với Hệ Thống Tiêm Chủng</h1>
+        <p class="fs-5 text-muted">Quản lý hồ sơ bệnh nhân, theo dõi kho vaccine và lập phiếu tiêm chủng nhanh chóng, chính xác.</p>
+    </div>
+</div>
+
+<div class="row text-center">
+    <div class="col-md-4 mb-4">
+        <div class="card p-4 h-100 shadow-sm border-start border-primary border-5">
+            <i class="fas fa-user-plus fa-3x text-primary mb-3"></i>
+            <h4>Đăng ký Bệnh nhân</h4>
+            <p class="text-muted">Thêm mới thông tin người dân đến khám và tiêm chủng.</p>
+            <a href="/patients" class="btn btn-outline-primary mt-auto">Truy cập</a>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card p-4 h-100 shadow-sm border-start border-success border-5">
+            <i class="fas fa-boxes fa-3x text-success mb-3"></i>
+            <h4>Quản lý Kho</h4>
+            <p class="text-muted">Theo dõi số lượng tồn kho và hạn sử dụng của từng loại vaccine.</p>
+            <a href="/vaccines" class="btn btn-outline-success mt-auto">Truy cập</a>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card p-4 h-100 shadow-sm border-start border-danger border-5">
+            <i class="fas fa-notes-medical fa-3x text-danger mb-3"></i>
+            <h4>Phiếu tiêm chủng</h4>
+            <p class="text-muted">Ghi nhận lịch sử tiêm và theo dõi phản ứng sau tiêm.</p>
+            <a href="/inject" class="btn btn-outline-danger mt-auto">Truy cập</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Quản lý Tiêm chủng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+    <h2 class="text-primary">Trạm Y Tế: Danh mục Vaccine kho</h2>
+    <div class="card card-body mb-4">
+    <h5>Nhập Vaccine mới vào kho</h5>
+    <form action="/add" method="POST" class="row g-3">
+        <div class="col-md-4">
+            <input type="text" name="ten" class="form-control" placeholder="Tên vaccine" required>
+        </div>
+        <div class="col-md-3">
+            <input type="number" name="soluong" class="form-control" placeholder="Số lượng" required>
+        </div>
+        <div class="col-md-3">
+            <input type="text" name="hsd" class="form-control" placeholder="Hạn sử dụng (dd/mm/yyyy)">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-success w-100">Thêm</button>
+        </div>
+    </form>
+</div>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Tên Vaccine</th>
+            <th>Số lượng</th>
+            <th>Hạn sử dụng</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for v in vaccines %}
+        <tr>
+            <td>{{ v.ten_vaccine }}</td>
+            <td>{{ v.so_luong }} liều</td>
+            <td>{{ v.han_su_dung }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</body>
+</html> -->

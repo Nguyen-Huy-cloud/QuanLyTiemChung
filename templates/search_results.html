@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        h4><i class="fas fa-search me-2 text-primary"></i>Kết quả tìm kiếm cho: "<span class="text-primary">{{ request.args.get('query') }}</span>"</h4>
+        <a href="/patients" class="btn btn-secondary btn-sm">Quay lại danh sách</a>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            {% if results %}
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Họ tên</th>
+                            <th>Ngày sinh</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in results %}
+                        <tr>
+                            <td><strong>{{ p.fullname }}</strong></td>
+                            <td>{{ p.dob.strftime('%d/%m/%Y') if p.dob else '' }}</td>
+                            <td>{{ p.phone }}</td>
+                            <td><small>{{ p.address }}</small></td>
+                            <td class="text-center">
+                                <a href="{{ url_for('patient_history', patient_id=p.id) }}" class="btn btn-info btn-sm text-white">
+                                    <i class="fas fa-history"></i> Lịch sử tiêm
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="p-5 text-center">
+                <i class="fas fa-user-slash fa-3x text-muted mb-3"></i>
+                <p class="lead text-muted">Không tìm thấy bệnh nhân nào khớp với dữ liệu trên.</p>
+                <a href="/patients" class="btn btn-primary">Thêm bệnh nhân mới</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

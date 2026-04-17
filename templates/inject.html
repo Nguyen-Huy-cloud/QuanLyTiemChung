@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-danger text-white fw-bold">
+                <i class="fas fa-pen-nib me-2"></i>LẬP PHIẾU TIÊM MỚI
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Bệnh nhân</label>
+                        <select name="patient_id" class="form-select border-danger shadow-none" required>
+                            <option value="">-- Chọn bệnh nhân --</option>
+                            {% for p in patients %}
+                            <option value="{{ p.id }}">{{ p.fullname }} (SĐT: {{ p.phone }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Ngày tiêm chủng</label>
+                        <input type="date" name="date" class="form-control" required>
+                        <label class="form-label fw-bold mt-2">Vaccine sử dụng</label>
+                        <label class="form-label fw-bold text-primary">Ngày hẹn tiêm mũi tiếp theo</label>
+                        <input type="date" name="next_appointment" class="form-control border-primary">
+                        <small class="text-muted italic">* Nếu là mũi cuối, có thể để trống.</small>
+                        <select name="vaccine_id" class="form-select" required>
+                            {% for v in vaccines %}
+                            <option value="{{ v.id }}">{{ v.name }} (Lô: {{ v.batch_number }} - Còn: {{ v.quantity }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Mũi tiêm thứ</label>
+                        <input type="number" name="dose" class="form-control" value="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Phản ứng sau tiêm</label>
+                        <textarea name="reaction" class="form-control" rows="2" placeholder="Bình thường / Sốt nhẹ..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-danger w-100 py-2 fw-bold">
+                        <i class="fas fa-check-circle me-2"></i>XÁC NHẬN TIÊM
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0">
+            <div class="card-header bg-dark text-white fw-bold">LỊCH SỬ TIÊM CHỦNG</div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Ngày</th>
+                                <th>Bệnh nhân</th>
+                                <th>Vaccine</th>
+                                <th>Cán bộ</th>
+                                <th>Phản ứng sau tiêm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in records %}
+                            <tr>
+                                <td>{{ r.injection_date.strftime('%d/%m/%Y') if r.injection_date else '' }}</td>
+                                <td><strong>{{ r.patient.fullname }}</strong></td>
+                                <td><span class="badge bg-info text-dark">{{ r.vaccine.name }}</span></td>
+                                <td>{{ r.staff.username }}</td>
+                                <td>
+                                    {% if not r.reaction %}
+                                        <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#reactionModal{{ r.id }}">
+                                            Ghi nhận P/Ứ
+                                        </button>
+                                    {% else %}
+                                        <span class="badge bg-success">{{ r.reaction }}</span>
+                                        <button type="button" class="btn btn-link btn-sm p-0 ms-2" data-bs-toggle="modal" data-bs-target="#reactionModal{{ r.id }}">Sửa</button>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% for r in records %}
+<div class="modal fade" id="reactionModal{{ r.id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form action="{{ url_for('update_reaction', record_id=r.id) }}" method="POST">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cập nhật phản ứng: {{ r.patient.fullname }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Vaccine:</strong> {{ r.vaccine.name }} (Mũi {{ r.dose_number }})</p>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Tình trạng sau theo dõi:</label>
+                        <textarea name="reaction" class="form-control" rows="3">{{ r.reaction if r.reaction else '' }}</textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu cập nhật</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}

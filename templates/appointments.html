@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card shadow-sm border-0">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-bell me-2"></i>DANH SÁCH NHẮC HẸN TIÊM CHỦNG</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Ngày hẹn</th>
+                    <th>Bệnh nhân</th>
+                    <th>Số điện thoại</th>
+                    <th>Vaccine cần tiêm</th>
+                    <th>Trạng thái</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for app in appointments %}
+                <tr class="{% if app.next_appointment == today %}table-warning{% endif %}">
+                    <td><strong>{{ app.next_appointment.strftime('%d/%m/%Y') }}</strong></td>
+                    <td>{{ app.patient.fullname }}</td>
+                    <td><a href="tel:{{ app.patient.phone }}">{{ app.patient.phone }}</a></td>
+                    <td>{{ app.vaccine.name }} (Mũi tiếp theo)</td>
+                    <td>
+                        {% if app.next_appointment == today %}
+                            <span class="badge bg-danger">Hôm nay</span>
+                        {% else %}
+                            <span class="badge bg-info text-dark">Sắp đến</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3><i class="fas fa-user-md text-primary"></i> Lịch sử tiêm chủng: {{ patient.fullname }}</h3>
+        <a href="{{ url_for('manage_patients') }}" class="btn btn-secondary btn-sm">Quay lại danh sách</a>
+    </div>
+
+    <div class="row">
+        {% for record in history %}
+        <div class="col-12 mb-3">
+            <div class="card shadow-sm border-0 border-start border-4 border-success">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-2">
+                            <span class="text-muted d-block small">Ngày tiêm</span>
+                            <strong>{{ record.injection_date.strftime('%d/%m/%Y') }}</strong>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="text-muted d-block small">Loại Vaccine</span>
+                            <span class="badge bg-primary">{{ record.vaccine.name }}</span>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <span class="text-muted d-block small">Liều số</span>
+                            <span class="badge bg-dark">Mũi {{ record.dose_number }}</span>
+                        </div>
+                        <div class="col-md-5">
+                            <span class="text-muted d-block small">Phản ứng/Ghi chú của bác sĩ</span>
+                            <p class="mb-0 {% if record.reaction %}text-danger fw-bold{% else %}text-muted{% endif %}">
+                                {{ record.reaction if record.reaction else 'Sức khỏe bình thường' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-folder-open fa-3x text-light mb-3"></i>
+            <p class="text-muted">Bệnh nhân này chưa có dữ liệu tiêm chủng trên hệ thống.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
